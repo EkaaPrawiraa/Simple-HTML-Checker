@@ -1,84 +1,77 @@
 class PDA:
-    def __init__(self, states, input_symbols, stack_symbols, start_state, start_stack, accepting_states, transitions):
-        self.states = states
-        self.input_symbols = input_symbols
-        self.stack_symbols = stack_symbols
-        self.start_state = start_state
-        self.start_stack = start_stack
-        self.accepting_states = accepting_states
-        self.transitions = transitions
-        self.stack = [start_stack]
+    def __init__(self, definition_file):
+        self.states = set()
+        self.input_symbols = set()
+        self.stack_symbols = set()
+        self.start_state = None
+        self.start_stack_symbol = None
+        self.accepting_states = set()
+        self.acceptance_condition = None
+        self.transitions = []
 
-    def process_input(self, input_word):
+        self.load_definition(definition_file)
+
+    def load_definition(self, definition_file):
+        with open(definition_file, 'r') as file:
+            for line in file:
+                line = line.strip().split()
+                if line[0] == 'Q':
+                    self.states = set(line[1:])
+                elif line[0] == 'a':
+                    self.input_symbols = set(line[1:])
+                elif line[0] == 'Z':
+                    self.stack_symbols = set(line[1:])
+                elif line[0] == 'Q':
+                    self.start_state = line[1]
+                elif line[0] == 'Z':
+                    self.start_stack_symbol = line[1]
+                elif line[0] == 'F':
+                    self.accepting_states = set(line[1:])
+                elif line[0] == 'F':
+                    self.acceptance_condition = line[1]
+                else:
+                    self.transitions.append(tuple(line))
+
+    def process_input(self, input_string):
+        stack = [self.start_stack_symbol]
         current_state = self.start_state
 
-        for symbol in input_word:
-            current_stack_top = self.stack[-1] if self.stack else None
-            transition = self.find_transition(current_state, symbol, current_stack_top)
+        for symbol in input_string:
+            for transition in self.transitions:
+                if (
+                    transition[0] == current_state
+                    and transition[1] == symbol
+                    and transition[2] == stack[-1]
+                ):
+                    stack.pop()
+                    stack += list(transition[3])
+                    current_state = transition[4]
+                    break
 
-            if transition is None:
-                return False
+        if (
+            current_state in self.accepting_states
+            and (self.acceptance_condition == 'E' and not stack)
+            or (self.acceptance_condition == 'F' and current_state in self.accepting_states)
+        ):
+            return True
+        else:
+            return False
 
-            next_state, stack_action = transition
-            current_state = next_state
 
-            if stack_action != 'e':
-                if stack_action == 'E':
-                    if not self.stack:
-                        return False
-                    self.stack.pop()
-                else:
-                    self.stack.extend(stack_action[::-1])
+def main():
+    pda = PDA('pda_definition.txt')
 
-        return current_state in self.accepting_states and not self.stack
+    while True:
+        input_string = input('Enter an input string (or "exit" to quit): ')
+        if input_string.lower() == 'exit':
+            break
 
-    def find_transition(self, current_state, input_symbol, stack_top):
-        for transition in self.transitions:
-            if (
-                transition[0] == current_state
-                and (transition[1] == input_symbol or transition[1] == 'e')
-                and (transition[2] == stack_top or transition[2] == 'Z')
-            ):
-                return transition[3], transition[4]
-        return None
+        result = pda.process_input(input_string)
+        if result:
+            print('Accepted')
+        else:
+            print('Rejected')
 
 
 if __name__ == "__main__":
-    import sys
-
-    if len(sys.argv) != 3:
-        print("Usage: python main.py <pda_file> <html_file>")
-        sys.exit(1)
-
-    pda_file = sys.argv[1]
-    html_file = sys.argv[2]
-
-    try:
-        with open(pda_file, 'r') as pda_file:
-            lines = pda_file.readlines()
-
-            states = set(lines[0].split())
-            input_symbols = set(lines[1].split())
-            stack_symbols = set(lines[2].split())
-            start_state = lines[3].strip()
-            start_stack = lines[4].strip()
-            accepting_states = set(lines[5].split())
-
-            transitions = [line.strip().split() for line in lines[7:]]
-    except FileNotFoundError:
-        print(f"PDA file {pda_file} not found.")
-        sys.exit(1)
-
-    try:
-        with open(html_file, 'r') as html_file:
-            html_content = html_file.read()
-    except FileNotFoundError:
-        print(f"HTML file {html_file} not found.")
-        sys.exit(1)
-
-    pda = PDA(states, input_symbols, stack_symbols, start_state, start_stack, accepting_states, transitions)
-
-    if pda.process_input(html_content):
-        print("Accepted")
-    else:
-        print("Not Accepted")
+    main()
