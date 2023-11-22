@@ -1,3 +1,4 @@
+import re
 class PDA:
     def __init__(self, states, input_symbols, stack_symbols, start_state, start_stack, accepting_states, transitions):
         self.states = states
@@ -11,47 +12,51 @@ class PDA:
 
     def process_input(self, input_word):
         current_state = self.start_state
+        slices_list = []
+        remove_pattern = re.compile(r'\s*(id|style|class)\s*=\s*"[^"]*"\s*')
+
         i = 0
-        slices_list=[]
         while i < len(input_word):
             if input_word[i] == '<':
-                # Find the index of the closing '>'
                 end_index = input_word.find('>', i)
-                
-                # Check if a closing '>' was found
                 if end_index != -1:
-                    # Extract the slice and add it to the list
                     current_slice = input_word[i:end_index + 1]
-                    slices_list.append(current_slice)
-                    
-                    # Move the index to the character after '>'
+                    modified_slice = remove_pattern.sub('', current_slice)
+
+                    # Check if there is content immediately following the opening tag
+                    content_start = end_index + 1
+                    content_end = input_word.find('<', content_start)
+                    if content_end != -1:
+                        content = input_word[content_start:content_end].strip()
+                        modified_slice += content
+
+                    slices_list.append(modified_slice)
                     i = end_index + 1
                 else:
-                    # If no closing '>' was found, move to the next character
                     i += 1
             else:
-                # If the current character is not '<', move to the next character
                 i += 1
-        # Print the slices
+
         print(slices_list)
+
+        # Print the slices
         for symbol in slices_list:
+            match=re.match(r'<(.*?)>', symbol)
+            extracted_content = match.group() if match else None
+            print(extracted_content)
             current_stack_top = self.stack[-1] if self.stack else None
-            print(current_state)
-            print(current_stack_top)
-            print(symbol)
-            transition = self.find_transition(current_state, symbol, current_stack_top)
-            print(transition)
+            transition = self.find_transition(current_state, extracted_content, current_stack_top)
             if transition is None:
                 return False
-
             next_state, stack_action, stackkaa = transition
             current_state = next_state
-            if stackkaa != 'e':
+            if extracted_content!=symbol and current_state!='stringstate':
+                return False
+            if stackkaa != 'e' or stackkaa==current_stack_top:
                 self.stack.pop()
             if stack_action != 'e':
                 self.stack.append(stack_action)
-            print(self.stack)
-        return current_state in self.accepting_states or not self.stack
+        return not self.stack
 
     def find_transition(self, current_state, input_symbol, stack_top):
         for transition in self.transitions:
@@ -86,7 +91,6 @@ if __name__ == "__main__":
             accepting_states = set(lines[5].split())
 
             transitions = [line.strip().split() for line in lines[6:]]
-            print(transitions)
     except FileNotFoundError:
         print(f"PDA file {pda_file} not found.")
         sys.exit(1)
@@ -102,7 +106,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     pda = PDA(states, input_symbols, stack_symbols, start_state, start_stack, accepting_states, transitions)
-
+    print(html_content_stripped)
     if pda.process_input(html_content_stripped):
         print("Accepted")
     else:
