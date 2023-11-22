@@ -6,6 +6,13 @@ Z
 E 
 Q <html> Z Q ht
 Q <head> e headstate he
+
+headstate <title> e stringstate ttl
+stringstate </title> ttl headstate e
+stringstate <link> e stringstate e
+headstate <link> e headstate e
+headstate <script> e stringstate script
+stringstate </script> script headstate e
 headstate </head> he bodystate e
 bodystate <body> e bodystate body
 bodystate </body> body Q e
