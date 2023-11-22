@@ -13,6 +13,7 @@ class PDA:
         current_state = self.start_state
         i = 0
         slices_list=[]
+        # print(slices_list)
         while i < len(input_word):
             if input_word[i] == '<':
                 # Find the index of the closing '>'
@@ -33,14 +34,14 @@ class PDA:
                 # If the current character is not '<', move to the next character
                 i += 1
         # Print the slices
-        print(slices_list)
+        # print(slices_list)
         for symbol in slices_list:
             current_stack_top = self.stack[-1] if self.stack else None
-            print(current_state)
-            print(current_stack_top)
-            print(symbol)
+            # print(current_state)
+            # print(current_stack_top)
+            # print(symbol)
             transition = self.find_transition(current_state, symbol, current_stack_top)
-            print(transition)
+            # print(transition)
             if transition is None:
                 return False
 
@@ -50,7 +51,7 @@ class PDA:
                 self.stack.pop()
             if stack_action != 'e':
                 self.stack.append(stack_action)
-            print(self.stack)
+            # print(self.stack)
         return current_state in self.accepting_states or not self.stack
 
     def find_transition(self, current_state, input_symbol, stack_top):
@@ -86,7 +87,7 @@ if __name__ == "__main__":
             accepting_states = set(lines[5].split())
 
             transitions = [line.strip().split() for line in lines[6:]]
-            print(transitions)
+            # print(transitions)
     except FileNotFoundError:
         print(f"PDA file {pda_file} not found.")
         sys.exit(1)

@@ -1,12 +1,26 @@
 Q P F 
 <html> </html> <head> </head> <body> </body> 
-ht he b 
+ht he b ttl link script
 Q 
 Z 
 E 
 Q <html> Z Q ht
 Q <head> e headstate he
+
+headstate <title> e stringstate ttl
+stringstate </title> ttl headstate e
+stringstate <link> e stringstate e
+headstate <link> e headstate e
+headstate <script> e stringstate script
+stringstate </script> script headstate e
 headstate </head> he bodystate e
+
 bodystate <body> e bodystate b
+bodystate <script> e stringstate script
+stringstate </script> script bodystate e
+bodystate <link> e bodystate e
+
+
+
 bodystate </body> b Q e
 Q </html> ht Q e
