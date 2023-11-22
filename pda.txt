@@ -1,17 +1,14 @@
 Q P F
-< > a e
+a
 Z Y
 Q
 Z
 F
 F
-Q < Z Q < YZ
-Q > Z Q > e
-Q a Z Q a Z
-Q a Y Q a Y
-Q e Z P e
-Q e Y P e
-P < Z e
-P > Z e
-P a Z e
+Q a Z Q YZ
+Q a Y Q YY
+Q e Z P Z
+Q e Y P Y 
+P a Z P e 
+P a Y P e
 P e Z F e

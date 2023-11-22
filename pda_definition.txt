@@ -18,14 +18,12 @@ bodystate </body> body Q e
 bodystate <input> e bodystate
 bodystate <table> e tablestate table
 tablestate </table> table bodystate e
-tablestate <tr> e tablestate tr
-tablestate </tr> tr tablestate e
-tablestate <td> e stringstate td
-stringstate <td> e stringstate td
-stringstate </td> td tablestate e
-tablestate <th> e stringstate th
-stringstate <th> e stringstate th
-stringstate </th> th tablestate e
+tablestate <tr> e trstate tr
+trstate </tr> tr tablestate e
+trstate <td> e stringstate td
+stringstate </td> td trstate e
+trstate <th> e stringstate th
+stringstate </th> th trstate e
 headstate <title> e stringstate ttl
 headstate <link> e headstate e
 headstate <script> e stringstate script

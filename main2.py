@@ -35,20 +35,20 @@ class PDA:
                 else:
                     i += 1
             else:
-                
                 i += 1
+        print(slices_list)
         for symbol in slices_list:
             match=re.match(r'<(.*?)>', symbol)
             extracted_content = match.group() if match else None
-            match = re.match(r'<([a-zA-Z0-9_]+)(.*?)>', extracted_content)
-            tag_name = f'<{match.group(1)}>'
-            attributes = match.group(2)
-            print(f"{tag_name} and {attributes}")
+            match = re.match(r'<(/?[[a-zA-Z0-9_]+)(.*?)>', extracted_content)
+            tag_name = f'<{match.group(1)}>' if match else None
+            attributes = match.group(2) if match else None
+            list_att=attributes.split()
             current_stack_top = self.stack[-1] if self.stack else None
             transition = self.find_transition(current_state, tag_name, current_stack_top)
             if transition is None:
-                print("salah di")
-                print(tag_name)
+                print("salah di1")
+                print(extracted_content)
                 return False
             next_state, stack_action, stackkaa = transition
             current_state = next_state
@@ -60,6 +60,30 @@ class PDA:
                 self.stack.pop()
             if stack_action != 'e':
                 self.stack.append(stack_action)
+            listofwajib=[]
+            listofh=[]
+            for trans in self.transitions:
+                if (trans[0]==tag_name):
+                    if trans[2]=='w':
+                        listofwajib.append(trans[1])
+                    elif trans[2]=='h':
+                        listofh.append(trans[1])
+            for elements in list_att:
+                i=0
+                end_index = elements.find('=', i)
+                current_slice = input_word[i:end_index]
+                if current_slice not in listofwajib and(current_slice not in listofh):
+                    return False
+                elif current_slice in listofwajib:
+                    listofwajib.remove(current_slice)
+                elif current_slice in listofh:
+                    listofh.remove(current_slice)
+            if len(listofwajib!=0):
+                return False
+
+                
+
+                
         return not self.stack
     
 
@@ -102,25 +126,17 @@ if __name__ == "__main__":
 
     try:
         with open(html_file, 'r') as file:
-            html_content = file.readlines()
-    
+            html_content = file.read()
 
     # Remove newlines and spaces
-        # html_content_stripped = html_content.replace('\n', '').replace(' ', '')
+        html_content_stripped = html_content.replace('\n', '')
     except FileNotFoundError:
         print(f"HTML file {html_file} not found.")
         sys.exit(1)
-    for z in range(len(html_content)):
 
-        html_content[z]=html_content[z].replace('\n', '')
     pda = PDA(states, input_symbols, stack_symbols, start_state, start_stack, accepting_states, transitions)
-    for line in html_content:
-        Accept=True
-        # print(html_content_stripped)
-        if not pda.process_input(line):
-            Accept=False
-            break
-    if (Accept):
+    print(html_content_stripped)
+    if pda.process_input(html_content_stripped):
         print("Accepted")
     else:
-        print("Rejected")
+        print("Not Accepted")
