@@ -38,9 +38,6 @@ class PDA:
                 i += 1
 
         print(slices_list)
-
-        # Print the slices
-        print(slices_list)
         for symbol in slices_list:
             match=re.match(r'<(.*?)>', symbol)
             extracted_content = match.group() if match else None
