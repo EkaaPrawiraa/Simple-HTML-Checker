@@ -1,0 +1,14 @@
+Q P F # total states
+<html> </html> <head> </head> <body> </body> # input word symbols
+ht he b # stack symbols
+Q # starting state
+Z # starting stack
+E #- accepts with empty stack or F - accepts with accepting state
+Q <html> Z Q ht# list of productions (current state, read from word, take from stack, next state, add to stack)
+Q <head> e headstate he
+headstate </head> he bodystate e
+bodystate <body> e bodystate b
+bodystate </body> b Q e
+Q </html> ht Q e
+P a Y P e
+P e Z F e
