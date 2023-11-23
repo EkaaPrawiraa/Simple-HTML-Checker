@@ -113,4 +113,14 @@ stringstate </button> buttons stringstate e
 stringstate <form> e stringstate forms
 stringstate </form> forms stringstate e
 stringstate <input> e stringstate e
+<img> src w e e
+<img> alt h e e
+<link> rel w e e
+<link> href h e e
+<script> src h e e
+<a> href h e e
+<button> type h e e
+<form> action h e e
+<form> method h e e
+<input> type h e e 
 Q </html> ht Q e

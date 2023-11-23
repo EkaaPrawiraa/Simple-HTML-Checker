@@ -61,25 +61,53 @@ class PDA:
             if stack_action != 'e':
                 self.stack.append(stack_action)
             listofwajib=[]
-            listofh=[]
+            listofh=['id','style','class']
+            type=[]
             for trans in self.transitions:
                 if (trans[0]==tag_name):
                     if trans[2]=='w':
                         listofwajib.append(trans[1])
                     elif trans[2]=='h':
                         listofh.append(trans[1])
-            for elements in list_att:
-                i=0
-                end_index = elements.find('=', i)
-                current_slice = input_word[i:end_index]
-                if current_slice not in listofwajib and(current_slice not in listofh):
+            if (tag_name=='<form>' ):
+                type=['GET','POST']
+            elif (tag_name =='<input>'):
+                type = ['text','password','email','number','checkbox']
+            elif (tag_name == '<button>'):
+                type = ['submit','reset','button']
+            if (len(listofwajib)!=0):
+                for elements in list_att:
+                    i=0
+                    end_index = elements.find('=', i)
+                    current_slice = input_word[i:end_index]
+                    print(current_slice)
+                    if current_slice not in listofwajib or (current_slice not in listofh):
+                        return False
+                    elif current_slice in listofwajib:
+                        listofwajib.remove(current_slice)
+                    elif current_slice in listofh:
+                        listofh.remove(current_slice)
+                if len(listofwajib)!=0:
                     return False
-                elif current_slice in listofwajib:
-                    listofwajib.remove(current_slice)
-                elif current_slice in listofh:
-                    listofh.remove(current_slice)
-            if len(listofwajib)!=0:
-                return False
+            elif (len(list_att)!=0):
+                for elements in list_att:
+                    i=0
+                    end_index = elements.find('=', i)
+                    current_slice = input_word[i:end_index]
+                    end_filled = elements.find('"',end_index+2)
+                    filled_slice=input_word[end_filled+1]
+                    if current_slice not in listofwajib or (current_slice not in listofh):
+                        return False
+                    elif current_slice in listofwajib:
+                        listofwajib.remove(current_slice)
+                    elif current_slice in listofh:
+                        if filled_slice not in type:
+                            return False
+                
+
+                
+                
+
 
                 
 
