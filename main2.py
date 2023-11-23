@@ -78,7 +78,7 @@ class PDA:
                     listofwajib.remove(current_slice)
                 elif current_slice in listofh:
                     listofh.remove(current_slice)
-            if len(listofwajib!=0):
+            if len(listofwajib)!=0:
                 return False
 
                 
