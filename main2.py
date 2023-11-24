@@ -49,6 +49,7 @@ class PDA:
             print(tag_name)
             if transition is None:
                 print("salah di1")
+                print(current_stack_top)
                 print(tag_name)
                 return False
             next_state, stack_action, stackkaa = transition
@@ -103,17 +104,22 @@ class PDA:
                     i=0
                     end_index = elements.find('=', i)
                     current_slice = elements[i:end_index]
-                    current_slice = elements[i:end_index]
+                
                     end_filled = elements.find('"',end_index+2)
                     filled_slice=elements[end_index+2:end_filled]
                     print(filled_slice)
+                    print(current_slice)
                     if current_slice not in listofwajib and (current_slice not in listofh):
+                        print("masuk sini 1\n")
                         return False
                     elif current_slice in listofwajib:
+                        print("masuk sini 2\n")
                         listofwajib.remove(current_slice)
                     elif current_slice in listofh:
-                        if filled_slice not in type:
-                            return False
+                        if current_slice in ['type','method']:
+                            if filled_slice not in type:
+                                print("masuk sini 3\n")
+                                return False
                           
         return not self.stack
     
