@@ -40,7 +40,7 @@ class PDA:
         for symbol in slices_list:
             match=re.match(r'<(.*?)>', symbol)
             extracted_content = match.group() if match else None
-            match = re.match(r'<(/?[[a-zA-Z0-9_]+)(.*?)>', extracted_content)
+            match = re.match(r'<(/?[a-zA-Z0-9_]+)(.*?)>', extracted_content)
             tag_name = f'<{match.group(1)}>' if match else None
             attributes = match.group(2) if match else None
             list_att=attributes.split()
@@ -49,7 +49,7 @@ class PDA:
             print(tag_name)
             if transition is None:
                 print("salah di1")
-                print(extracted_content)
+                print(tag_name)
                 return False
             next_state, stack_action, stackkaa = transition
             current_state = next_state
@@ -57,7 +57,7 @@ class PDA:
                 print("Salah di:")
                 print(tag_name)
                 return False
-            if stackkaa != 'e' or stackkaa==current_stack_top:
+            if stackkaa != 'e' and stackkaa==current_stack_top:
                 self.stack.pop()
             if stack_action != 'e':
                 self.stack.append(stack_action)
@@ -103,6 +103,7 @@ class PDA:
                     i=0
                     end_index = elements.find('=', i)
                     current_slice = elements[i:end_index]
+                    current_slice = elements[i:end_index]
                     end_filled = elements.find('"',end_index+2)
                     filled_slice=elements[end_index+2:end_filled]
                     print(filled_slice)
@@ -113,15 +114,7 @@ class PDA:
                     elif current_slice in listofh:
                         if filled_slice not in type:
                             return False
-                
-
-                
-                
-
-
-                
-
-                
+                          
         return not self.stack
     
 
@@ -167,13 +160,12 @@ if __name__ == "__main__":
             html_content = file.read()
 
     # Remove newlines and spaces
-        html_content_stripped = html_content.replace('\n', '')
+        html_content_stripped = html_content.replace('\n', ' ')
     except FileNotFoundError:
         print(f"HTML file {html_file} not found.")
         sys.exit(1)
 
     pda = PDA(states, input_symbols, stack_symbols, start_state, start_stack, accepting_states, transitions)
-    print(html_content_stripped)
     if pda.process_input(html_content_stripped):
         print("Accepted")
     else:
