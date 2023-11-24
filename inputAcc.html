@@ -1,21 +1,15 @@
 <html>
-<head> 
-  <title>Simple Webpage</title>
+    <head>
+        <title>Simple Webpage</title>
+        <script>
+            document.getElementById("demo").innerHTML = "Hello JavaScript!";
+        </script>
+    </head>
+    <body>
+        <h1>The script element</h1>
+        <a>Not going anywhere</a><br>
+        <a href="https://www.google.co.id/">Might send you somewhere</a>
 
-</head>
-<body>
-
-<h2>HTML Forms</h2>
-
-<form action="/action_page.php" method="POST">
-  <div id="label">First name:</div><br>
-  <input type="text" id="fname"><br>
-  <div id="label">Last name:</div><br>
-  <input type="text" id="lname"><br><br>
-  <button type="submit">Submit</button>
-</form> 
-
-<p>If you click the "Submit" button, the form-data will be sent to a page called "/action_page.php".</p>
-
-</body>
+        <p id="demo"></p>
+    </body>
 </html>
