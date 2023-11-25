@@ -103,9 +103,10 @@ class PDA:
                     i=0
                     end_index = elements.find('=', i)
                     current_slice = elements[i:end_index]
-                    end_filled = elements.find('"',end_index+2)
-                    filled_slice=elements[end_index+2:end_filled]
-                    # print(filled_slice)
+                    end_filled = len(elements)
+                    filled_slice=elements[end_index+1:end_filled]
+                    print(current_slice)
+                    print(filled_slice)
                     if current_slice not in listofwajib and (current_slice not in listofh):
                         print(f"Salah di : {current_slice}\n")
                         return False
@@ -136,6 +137,7 @@ class PDA:
                 and (transition[1] == input_symbol )
                 and (transition[2] == stack_top or (transition[2]=='e'))
             ):
+                print(transition)
                 return transition[3], transition[4], transition[2]
         return None
 

@@ -15,7 +15,7 @@ stringstate </script> script headstate e
 headstate </head> he bodystate e
 bodystate <body> e bodystate body
 bodystate </body> body Q e
-bodystate <input> e bodystate
+bodystate <input> e bodystate e
 bodystate <table> e tablestate table
 tablestate </table> table bodystate e
 tablestate <tr> e trstate tr
