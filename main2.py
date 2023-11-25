@@ -36,7 +36,7 @@ class PDA:
                     i += 1
             else:
                 i += 1
-        print(slices_list)
+        # print(slices_list)
         for symbol in slices_list:
             match=re.match(r'<(.*?)>', symbol)
             extracted_content = match.group() if match else None
@@ -46,15 +46,15 @@ class PDA:
             list_att=attributes.split()
             current_stack_top = self.stack[-1] if self.stack else None
             transition = self.find_transition(current_state, tag_name, current_stack_top)
+            # print(tag_name)
             if transition is None:
-                print("salah di1")
-                print(tag_name)
+                print(f"Salah di : {current_stack_top}\n")
+                # print(tag_name)
                 return False
             next_state, stack_action, stackkaa = transition
             current_state = next_state
             if extracted_content!=symbol and current_state!='stringstate':
-                print("salah di")
-                print(symbol)
+                print(f"Salah di : {current_stack_top}\n")
                 return False
             if stackkaa != 'e' and stackkaa==current_stack_top:
                 self.stack.pop()
@@ -75,33 +75,52 @@ class PDA:
                 type = ['text','password','email','number','checkbox']
             elif (tag_name == '<button>'):
                 type = ['submit','reset','button']
+            # print(list_att)
             if (len(listofwajib)!=0):
+                
                 for elements in list_att:
+                    # print(elements)
+                    # print(listofwajib)
                     i=0
                     end_index = elements.find('=', i)
                     current_slice = elements[i:end_index]
+                    # print(current_slice)
                     if (current_slice not in listofwajib) and (current_slice not in listofh):
+                        print(f"Salah di : {current_slice}\n")
+                        # print("masuk wajib\n")
                         return False
                     elif current_slice in listofwajib:
+                        # print("masuk wajib ini\n")
                         listofwajib.remove(current_slice)
                     elif current_slice in listofh:
+                        # print("masuk wajib itu\n")
                         listofh.remove(current_slice)
                 if len(listofwajib)!=0:
                     return False
             elif (len(list_att)!=0):
+                # print("masuk sini\n")
                 for elements in list_att:
                     i=0
                     end_index = elements.find('=', i)
                     current_slice = elements[i:end_index]
+                
                     end_filled = elements.find('"',end_index+2)
-                    filled_slice=elements[end_filled+1]
-                    if current_slice not in listofwajib or (current_slice not in listofh):
+                    filled_slice=elements[end_index+2:end_filled]
+                    # print(filled_slice)
+                    # print(current_slice)
+                    if current_slice not in listofwajib and (current_slice not in listofh):
+                        print(f"Salah di : {current_slice}\n")
+                        # print("masuk sini 1\n")
                         return False
                     elif current_slice in listofwajib:
+                        # print("masuk sini 2\n")
                         listofwajib.remove(current_slice)
                     elif current_slice in listofh:
-                        if filled_slice not in type:
-                            return False
+                        if current_slice in ['type','method']:
+                            if filled_slice not in type:
+                                print(f"Salah di : {filled_slice}\n")
+                                # print("masuk sini 3\n")
+                                return False
                           
         return not self.stack
     

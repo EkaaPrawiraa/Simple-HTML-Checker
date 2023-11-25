@@ -43,7 +43,7 @@ bodystate <div> e stringstate div
 bodystate <a> e stringstate a
 bodystate <img> e bodystate e
 bodystate <button> e stringstate button
-bodystate <form> e stringstate form
+bodystate <form> e stringstate formed
 bodystate <input> e bodystate e
 bodystate </body> body Q e
 stringstate <link> e stringstate e
@@ -60,7 +60,7 @@ stringstate </div> div bodystate e
 stringstate </a> a bodystate e
 stringstate <em> e stringstate ems
 stringstate </em> ems stringstate e
-stringstate </form> form bodystate e
+stringstate </form> formed bodystate e
 stringstate </input> e stringstate e
 stringstate </button> button bodystate e
 bodystate <h1> e stringstate h1
@@ -91,7 +91,7 @@ stringstate <script> e stringstate scripts
 stringstate </script> scripts stringstate e
 stringstate <p> e stringstate ps
 stringstate </p> ps stringstate e
-stringstate <br> e stringstate brs
+stringstate <br> e stringstate e
 stringstate <b> e stringstate bs
 stringstate </b> bs stringstate e
 stringstate <b> e stringstate bs
