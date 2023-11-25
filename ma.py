@@ -1,4 +1,5 @@
 import re
+import shlex
 class PDA:
     def __init__(self, states, input_symbols, stack_symbols, start_state, start_stack, accepting_states, transitions):
         self.states = states
@@ -29,7 +30,7 @@ class PDA:
                     if content_end != -1:
                         content = input_word[content_start:content_end].strip()
                         modified_slice += content
-                    if '!--'not in modified_slice:
+                    if '!--' not in modified_slice:
                         slices_list.append(modified_slice)
                     i = end_index + 1
                 else:
@@ -43,9 +44,10 @@ class PDA:
             match = re.match(r'<(/?[a-zA-Z0-9_]+)(.*?)>', extracted_content)
             tag_name = f'<{match.group(1)}>' if match else None
             attributes = match.group(2) if match else None
-            list_att=attributes.split()
+            list_att=shlex.split(attributes)
             current_stack_top = self.stack[-1] if self.stack else None
             transition = self.find_transition(current_state, tag_name, current_stack_top)
+            print(tag_name)
             if transition is None:
                 print("salah di1")
                 print(tag_name)
@@ -53,7 +55,7 @@ class PDA:
             next_state, stack_action, stackkaa = transition
             current_state = next_state
             if extracted_content!=symbol and current_state!='stringstate':
-                print("salah di")
+                print("Salah di:")
                 print(symbol)
                 return False
             if stackkaa != 'e' and stackkaa==current_stack_top:
@@ -75,34 +77,52 @@ class PDA:
                 type = ['text','password','email','number','checkbox']
             elif (tag_name == '<button>'):
                 type = ['submit','reset','button']
+            print(list_att)
             if (len(listofwajib)!=0):
+                
                 for elements in list_att:
+                    print(elements)
+                    print(listofwajib)
                     i=0
                     end_index = elements.find('=', i)
                     current_slice = elements[i:end_index]
+                    print(current_slice)
                     if (current_slice not in listofwajib) and (current_slice not in listofh):
+                        print("masuk wajib\n")
                         return False
                     elif current_slice in listofwajib:
+                        print("masuk wajib ini\n")
                         listofwajib.remove(current_slice)
                     elif current_slice in listofh:
+                        print("masuk wajib itu\n")
                         listofh.remove(current_slice)
                 if len(listofwajib)!=0:
                     return False
             elif (len(list_att)!=0):
+                print("masuk sini\n")
                 for elements in list_att:
                     i=0
                     end_index = elements.find('=', i)
                     current_slice = elements[i:end_index]
                     end_filled = elements.find('"',end_index+2)
-                    filled_slice=elements[end_filled+1]
-                    if current_slice not in listofwajib or (current_slice not in listofh):
+                    filled_slice=elements[end_index+2:end_filled]
+                    print(filled_slice)
+                    if current_slice not in listofwajib and (current_slice not in listofh):
                         return False
                     elif current_slice in listofwajib:
                         listofwajib.remove(current_slice)
                     elif current_slice in listofh:
                         if filled_slice not in type:
                             return False
-                          
+                
+
+                
+                
+
+
+                
+
+                
         return not self.stack
     
 
@@ -154,6 +174,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     pda = PDA(states, input_symbols, stack_symbols, start_state, start_stack, accepting_states, transitions)
+    print(html_content_stripped)
     if pda.process_input(html_content_stripped):
         print("Accepted")
     else:
