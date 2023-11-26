@@ -50,13 +50,13 @@ class PDA:
             match = re.match(r'<(/?[a-zA-Z0-9_]+)(.*?)>', extracted_content)
             tag_name = f'<{match.group(1)}>' if match else None
             attributes = match.group(2) if match else None
-            list_att=shlex.split(attributes)
             current_stack_top = self.stack[-1] if self.stack else None
             transition = self.find_transition(current_state, tag_name, current_stack_top)
             # print(tag_name)
             if transition is None:
-                # print(f"Salah di : {tag_name}\n")
+                print(f"Salah di : {tag_name}")
                 return False
+            list_att=shlex.split(attributes)
             next_state, stack_action, stackkaa = transition
             current_state = next_state
             if extracted_content!=symbol and current_state!='stringstate':
