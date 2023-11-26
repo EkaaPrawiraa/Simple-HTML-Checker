@@ -18,7 +18,7 @@ class PDA:
 
         i = 0
         print(input_word)
-        while input_word[i]!='<':
+        while i<len(input_word) and input_word[i]!='<':
             if input_word[i]!=' ':
                 print("Ada karakter sebelum <html>!")
                 return False
