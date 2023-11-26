@@ -14,7 +14,7 @@ headstate <script> e stringstate script
 stringstate </script> script headstate e
 headstate </head> he bodystate e
 bodystate <body> e bodystate body
-bodystate </body> body bodystate e
+bodystate </body> body Q e
 bodystate <input> e bodystate e
 bodystate <table> e tablestate table
 tablestate </table> table bodystate e
@@ -123,4 +123,4 @@ stringstate <input> e stringstate e
 <form> action h e e
 <form> method h e e
 <input> type h e e 
-bodystate </html> ht Q e
+Q </html> ht Q e

@@ -17,18 +17,25 @@ class PDA:
         remove_pattern = re.compile(r'\s*(id|style|class)\s*=\s*"[^"]*"\s*')
 
         i = 0
+        print(input_word)
+        while input_word[i]!='<':
+            if input_word[i]!=' ':
+                print("Ada karakter sebelum <html>!")
+                return False
+            i +=1
         while i < len(input_word):
             if input_word[i] == '<':
                 end_index = input_word.find('>', i)
                 if end_index != -1:
                     current_slice = input_word[i:end_index + 1]
                     modified_slice = remove_pattern.sub('', current_slice)
-
-                    # Check if there is content immediately following the opening tag
                     content_start = end_index + 1
                     content_end = input_word.find('<', content_start)
                     if content_end != -1:
                         content = input_word[content_start:content_end].strip()
+                        modified_slice += content
+                    else:
+                        content=input_word[content_start:len(input_word)].strip()
                         modified_slice += content
                     if '!--' not in modified_slice:
                         slices_list.append(modified_slice)
@@ -37,7 +44,7 @@ class PDA:
                     i += 1
             else:
                 i += 1
-        # print(slices_list)
+        print(slices_list)
         for symbol in slices_list:
             match=re.match(r'<(.*?)>', symbol)
             extracted_content = match.group() if match else None
